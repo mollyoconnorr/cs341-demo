@@ -1,5 +1,6 @@
 package edu.carroll.cs341;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,8 +19,16 @@ public class HelloControllerTest {
 
     @Test
     public void indexTest() throws Exception {
-        mockMvc.perform(get("/hello")).andDo(print())
+        String expectedName = "Spring Boot"; // This should match the value of the 'name' variable set in the controller
+
+        // Send request to "/"
+        mockMvc.perform(get("/?name=" + expectedName)).andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("Hello from Spring Boot!")));
+                .andExpect(content().string(containsString("Hello, " + expectedName + "!")));
+
+        // Test default behavior (no name parameter provided)
+        mockMvc.perform(get("/")).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Hello, Student!")));
     }
 }
