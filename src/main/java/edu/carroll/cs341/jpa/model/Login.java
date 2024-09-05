@@ -1,7 +1,6 @@
 package edu.carroll.cs341.jpa.model;
 
 import java.util.Objects;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +21,22 @@ public class Login {
 
     @Column(name = "password", nullable = false)
     private String hashedPassword;
+
+    // Default constructor
+    public Login() {
+    }
+
+    // Constructor with username and rawPassword
+    public Login(String username, String rawPassword) {
+        this.username = username;
+        setRawPassword(rawPassword);
+    }
+
+    // Setter for rawPassword
+    public void setRawPassword(String rawPassword) {
+        // XXX - This should *NEVER* be done in a real project
+        this.hashedPassword = Integer.toString(rawPassword.hashCode());
+    }
 
     public Integer getId() {
         return id;
@@ -76,3 +91,4 @@ public class Login {
         return Objects.hash(username, hashedPassword);
     }
 }
+
